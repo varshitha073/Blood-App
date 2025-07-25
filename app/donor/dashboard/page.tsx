@@ -115,6 +115,12 @@ export default function DonorDashboard() {
                 Confirmed Requests
               </Button>
             </Link>
+             <Link href="/donor/donation-history">
+              <Button variant="ghost" className="w-full justify-start">
+                <Check className="h-4 w-4 mr-2" />
+                Donation History
+              </Button>
+            </Link>
           </nav>
         </div>
 
