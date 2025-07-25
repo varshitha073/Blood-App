@@ -74,7 +74,7 @@ export default function DonorDashboard() {
   const handleLogout = async () => {
     try {
       await signOut(auth)
-      router.push("/")
+      router.push("/donor/auth")
     } catch (error) {
       console.error("Error signing out:", error)
     }
