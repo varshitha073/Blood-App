@@ -3,15 +3,22 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+// import { Button } from "@/.next/components/ui/button"
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/.next/components/ui/card"
+// import { Input } from "@/.next/components/ui/input"
+// import { Label } from "@/.next/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
 import { Mail, Lock, Hospital, ArrowLeft, Building } from "lucide-react"
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth"
 import { auth, db } from "@/lib/firebase"
 import { doc, setDoc, getDoc } from "firebase/firestore"
+// ✅ Correct if your folder is in 'app/components'
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { log } from "util"
 
 export default function HospitalLogin() {
   const [isLoading, setIsLoading] = useState(false)
@@ -30,11 +37,14 @@ export default function HospitalLogin() {
       const user = userCredential.user
 
       // Check if hospital profile exists
-      const hospitalDoc = await getDoc(doc(db, "hospitaldetails", user.uid))
-
+      const hospitalDoc = await getDoc(doc(db, "hospitals", user.uid))
+      //  console.log(hospitalDoc.data());
+      //  console.log(hospitalDoc.exists());
+       
+       
       if (hospitalDoc.exists()) {
         router.push("/hospital/dashboard")
-      } else {
+      } else {        
         router.push("/hospital/profile-setup")
       }
     } catch (error: any) {
@@ -44,33 +54,33 @@ export default function HospitalLogin() {
     }
   }
 
-  const handleSignup = async (formData: FormData) => {
-    setIsLoading(true)
-    setError("")
+  // const handleSignup = async (formData: FormData) => {
+  //   setIsLoading(true)
+  //   setError("")
 
-    try {
-      const hospitalName = formData.get("hospitalName") as string
-      const email = formData.get("email") as string
-      const password = formData.get("password") as string
+  //   try {
+  //     const hospitalName = formData.get("hospitalName") as string
+  //     const email = formData.get("email") as string
+  //     const password = formData.get("password") as string
 
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-      const user = userCredential.user
+  //     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+  //     const user = userCredential.user
 
-      // Create hospital auth record
-      await setDoc(doc(db, "hospitals", user.uid), {
-        hospitalName,
-        email,
-        createdAt: new Date().toISOString(),
-        uid: user.uid,
-      })
+  //     // Create hospital auth record
+  //     await setDoc(doc(db, "hospitals", user.uid), {
+  //       hospitalName,
+  //       email,
+  //       createdAt: new Date().toISOString(),
+  //       uid: user.uid,
+  //     })
 
-      router.push("/hospital/profile-setup")
-    } catch (error: any) {
-      setError(error.message)
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  //     router.push("/hospital/profile-setup")
+  //   } catch (error: any) {
+  //     setError(error.message)
+  //   } finally {
+  //     setIsLoading(false)
+  //   }
+  // }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-4">
